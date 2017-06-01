@@ -257,9 +257,16 @@
                     var userData = user.toJSON();        
                     usersRef.child (userData.uid).update(userData).catch(errorCallback)
                     vm.$set(vm.data, "currentUser" , userData )
+                        $(".glyphicon-plus").show()
+                        $(".glyphicon-pencil").show()
+                        $(".glyphicon-remove").show()
+                        $(".glyphicon-star").show()
                     }else{
                         vm.$set(vm.data, "currentUser" ,null)
-                        $(".glyphicon").hide()
+                        $(".glyphicon-plus").hide()
+                        $(".glyphicon-pencil").hide()
+                        $(".glyphicon-remove").hide()
+                        $(".glyphicon-star").hide()
                          }
                     })
                        
