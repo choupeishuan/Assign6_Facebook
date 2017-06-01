@@ -206,6 +206,7 @@
                     if ( this.editor.activity_id === null){
                         // ASN REQ 2 : this means we are creating new activity
                         // you should use one of the functions `updateActivity or createActivity` below
+                        
 
                     }else {
                         // ASN REQ 2 : this means we should UPDATE the activity whose id is `activity_id` , with this.editor.activity
@@ -231,7 +232,7 @@
                 },
                 updateActivity : function ( activity_id , activity ){
                     // ASN REQ 2 : update activitiesRef at `activity_id` with data `activity`. Always handle error!
-
+                    activitiesRef.child(activity_id).update(activity).catch(errorCallback)
                 },
                 removeActivity : function ( activity_id ){
                     // ASN REQ 2 : remove activity at `activity_id`. Always handle error!
@@ -250,7 +251,7 @@
               // ASN REQ 3 : detect authentication changes :
                   // if login :
                       // set login user to vm.data.currentUser
-               firebase.auth().onAuthStateChanged(function(user) {
+              firebase.auth().onAuthStateChanged(function(user) {
     
                 if (user){
                     var userData = user.toJSON();        
@@ -258,6 +259,7 @@
                     vm.$set(vm.data, "currentUser" , userData )
                     }else{
                         vm.$set(vm.data, "currentUser" ,null)
+                        $("#glyphicon").modal("hide")
                          }
                     })
                        
