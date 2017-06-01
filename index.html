@@ -249,7 +249,7 @@
               // ASN REQ 3 : detect authentication changes :
                   // if login :
                       // set login user to vm.data.currentUser
-                firebase.auth().onAuthStateChanged(function(user) {
+               firebase.auth().onAuthStateChanged(function(user) {
     
                 if (user){
                     var userData = user.toJSON();        
@@ -259,7 +259,7 @@
                         vm.$set(vm.data, "currentUser" ,null)
                          }
                     })
-                       }
+                       
                       // ASN REQ 4 :
                       // listen on chages on favorite data of currentUser , and set it to vm.data.currentUser
 
