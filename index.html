@@ -145,6 +145,7 @@
         var favoritesRef   = rootRef.child("favorites")
 
         var errorCallback  = function (msg){  alert(msg.message) }
+        var usersRef    = db.ref("users")
 
         window.app = new Vue({
 
