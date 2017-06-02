@@ -202,7 +202,7 @@
                 },
                 toggle_like : function ( activity_id ){
                     // ASN REQ 4 : update favoritesRef at `currentUser.uid ` at `activity_id` to true
-                  
+                  favoritesRef.child(activity_id).update(currentUser.uid).catch(errorCallback)
                 },
                 // C , R , D
                 createActivity : function ( new_activity ){
