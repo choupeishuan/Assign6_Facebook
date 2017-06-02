@@ -187,7 +187,7 @@
                 // ASN REQ 2 HINT: the two methods `editorCreateActivity` , `editorEditActivity` are used to open editor.
                 // you does not need to modify it.
                 editorCreateActivity: function(){
-                    activity_id = null
+                    this.activity_id = null
                     this.editor.activity = {
                         title   : "程式碼在唱歌 " + Math.ceil((Math.random()) * 200),
                         time    : (new Date()).toLocaleString("zh-TW"),
