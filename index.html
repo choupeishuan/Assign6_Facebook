@@ -206,11 +206,11 @@
                     if ( this.editor.activity_id === null){
                         // ASN REQ 2 : this means we are creating new activity
                         // you should use one of the functions `updateActivity or createActivity` below
-                      this.createActivity(this.editor.activity_idthis.editor.activity)
+                      this.createActivity(this.editor.activity)
                     }else {
                         // ASN REQ 2 : this means we should UPDATE the activity whose id is `activity_id` , with this.editor.activity
                         // you should use one of the functions `updateActivity or createActivity` below
-                      this.updateActivity(this.editor.activity)
+                      this.updateActivity(this.editor.activity_id,this.editor.activity)
                     }
                     $("#activityEditor").modal("hide")
                 },
@@ -224,9 +224,7 @@
                 createActivity : function ( new_activity ){
                     // ASN REQ 2 : push new_activity to activitiesRef. Always handle error!
                      var vm =this
-                    activitiesRef.push({
-                        new_activity: this.inputTxt
-                    }).catch(errorCallback)
+                    activitiesRef.push(new_activity).catch(errorCallback)
                 },
                 updateActivity : function ( activity_id , activity ){
                     // ASN REQ 2 : update activitiesRef at `activity_id` with data `activity`. Always handle error!
