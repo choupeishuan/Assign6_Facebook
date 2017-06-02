@@ -15,7 +15,7 @@
               <h1 class="pull-left">獨立音樂活動清單</h1>
 
               <div class="pull-right">
-                  <span class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#activityEditor" @click="editorCreateActivity()"></span>
+                  <span v-if="data.currentUser" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#activityEditor" @click="editorCreateActivity()"></span>
 
                   <span v-if="data.currentUser"><img :src="data.currentUser.photoURL" alt="" width="30" height="30"></span>
                   <span v-if="data.currentUser" class="glyphicon glyphicon glyphicon-off" @click="logout()"></span>
@@ -48,7 +48,7 @@
                           <dt>地點</dt>
                           <dd>{{activity.address}}</dd>
                       </dl>
-                      <footer>
+                      <footer v-if="data.currentUser">
                           <span class="bn glyphicon glyphicon-pencil" @click="editorEditActivity( activity_id , activity )"  data-toggle="modal" data-target="#activityEditor"></span>
                           <span class="bn glyphicon glyphicon-remove" @click="removeActivity( activity_id )"></span>
                       </footer>
@@ -126,7 +126,6 @@
     <script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.js"></script>
     <script>
-
         // ASN REQ 1 : replce all of  your config hrere
         var config = {
           apiKey: "AIzaSyBwfG402UCjzIpRix2rfE3pzcbbRF--vSM",
@@ -137,41 +136,31 @@
           messagingSenderId: "644878585772"
         };
         firebase.initializeApp(config);
-
         var db             = firebase.database()                  // class : firebase.database
         var rootRef        = db.ref()
-
         var activitiesRef  = rootRef.child("activities")              // class : firebase.reference -> root.activity
         var favoritesRef   = rootRef.child("favorites")
-
         var errorCallback  = function (msg){  alert(msg.message) }
         var usersRef    = db.ref("users")
-
         window.app = new Vue({
-
             el : "#app",
             data : {
-
                 data : {
                     currentUser : null, // default is logout status
                     favorites : {},
                     activities : {}
                 },
-
                 control : {
                     filter : "" ,
                     sort : "" ,
                     tab : "all" ,
                 },
-
                 editor : {
                     activity : {},
                     activity_id : "" ,
                     isCreating : false
                 }
-
             },
-
             methods : {
                 login : function (){
                     // ASN REQ 3 : merely singIn with fb here
@@ -183,11 +172,10 @@
                     // Release favritesRef's value listener or just simply calling window.location.reload().
                     firebase.auth().signOut()
                 },
-
                 // ASN REQ 2 HINT: the two methods `editorCreateActivity` , `editorEditActivity` are used to open editor.
                 // you does not need to modify it.
                 editorCreateActivity: function(){
-                    this.activity_id = null
+                    this.editor.activity_id = null
                     this.editor.activity = {
                         title   : "程式碼在唱歌 " + Math.ceil((Math.random()) * 200),
                         time    : (new Date()).toLocaleString("zh-TW"),
@@ -199,10 +187,8 @@
                     this.editor.activity_id = activity_id
                     this.editor.activity = activity
                 },
-
                 // ASN REQ 2 HINT : if `this.editor.activity_id` equals null , it means the editor is creating a new activity!!
                 editorSave : function (){
-
                     if ( this.editor.activity_id === null){
                         // ASN REQ 2 : this means we are creating new activity
                         // you should use one of the functions `updateActivity or createActivity` below
@@ -214,21 +200,23 @@
                     }
                     $("#activityEditor").modal("hide")
                 },
-
                 toggle_like : function ( activity_id ){
                     // ASN REQ 4 : update favoritesRef at `currentUser.uid ` at `activity_id` to true
                   
                 },
-
                 // C , R , D
                 createActivity : function ( new_activity ){
                     // ASN REQ 2 : push new_activity to activitiesRef. Always handle error!
                      var vm =this
                     activitiesRef.push(new_activity).catch(errorCallback)
+                    console.log(new_activity)
                 },
                 updateActivity : function ( activity_id , activity ){
                     // ASN REQ 2 : update activitiesRef at `activity_id` with data `activity`. Always handle error!
+                     console.log(activity_id)
                     activitiesRef.child(activity_id).update(activity).catch(errorCallback)
+                   
+                    console.log(activity)
                 },
                 removeActivity : function ( activity_id ){
                     // ASN REQ 2 : remove activity at `activity_id`. Always handle error!
@@ -236,7 +224,6 @@
                     this.$delete( this.data.activities , activity_id)
                 }
             },
-
             created: function created() {
               // ASN REQ 1 :
                   // listen on chages on activities data , and set it to vm.data.activities
@@ -253,28 +240,16 @@
                     var userData = user.toJSON();        
                     usersRef.child (userData.uid).update(userData).catch(errorCallback)
                     vm.$set(vm.data, "currentUser" , userData )
-                        $(".glyphicon-plus").show()
-                        $(".glyphicon-pencil").show()
-                        $(".glyphicon-remove").show()
-                        $(".glyphicon-star").show()
                     }else{
                         vm.$set(vm.data, "currentUser" ,null)
-                        $(".glyphicon-plus").hide()
-                        $(".glyphicon-pencil").hide()
-                        $(".glyphicon-remove").hide()
-                        $(".glyphicon-star").hide()
                          }
                     })
                        
                       // ASN REQ 4 :
                       // listen on chages on favorite data of currentUser , and set it to vm.data.currentUser
-
                   // else : not login : set vm.data.currentUser to null
-
-
             }
         })
-
     </script>
 
   </body>
